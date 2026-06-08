@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Gastos · BISA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c27;
+    --border: #2a2a3a;
+    --accent: #00e5a0;
+    --accent2: #0066ff;
+    --danger: #ff4455;
+    --text: #f0f0f5;
+    --muted: #6b6b80;
+    --gold: #ffd166;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .header-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    line-height: 1;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-text p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Steps indicator */
+  .steps {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+
+  .step-dot {
+    height: 3px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .step-dot.active { background: var(--accent); }
+  .step-dot.done { background: var(--accent2); }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: var(--surface2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .upload-zone:hover, .upload-zone.drag {
+    border-color: var(--accent);
+    background: rgba(0,229,160,0.05);
+  }
+
+  .upload-zone input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .upload-icon { font-size: 40px; margin-bottom: 12px; display: block; }
+
+  .upload-zone h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .upload-zone p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* Preview image */
+  .preview-wrap {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .preview-wrap img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+  }
+
+  .preview-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+  }
+
+  /* Extracted data */
+  .data-grid {
+    display: grid;
+    gap: 10px;
+  }
+
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: var(--surface2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .data-row .lbl {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .data-row .val {
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    max-width: 60%;
+  }
+
+  .val.monto {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  /* Input fields */
+  .field {
+    margin-bottom: 14px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .field input, .field textarea, .field select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .field input:focus, .field textarea:focus, .field select:focus {
+    border-color: var(--accent);
+  }
+
+  .field select option {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 72px;
+  }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #000;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    margin-top: 10px;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  /* Loading */
+  .loading-wrap {
+    text-align: center;
+    padding: 32px 20px;
+  }
+
+  .spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-wrap p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .loading-wrap .loading-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Success */
+  .success-wrap {
+    text-align: center;
+    padding: 32px 20px;
+  }
+
+  .success-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+    animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .success-wrap h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .success-wrap p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .sheet-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 10px 18px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* Error */
+  .error-box {
+    background: rgba(255,68,85,0.1);
+    border: 1px solid var(--danger);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--danger);
+    margin-bottom: 14px;
+  }
+
+  /* Hidden */
+  .hidden { display: none !important; }
+
+  /* Pulsing dot */
+  .pulse-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+    margin-right: 6px;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-icon">💸</div>
+    <div class="header-text">
+      <h1>GASTOS BISA</h1>
+      <p>Registro inteligente de comprobantes</p>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step-dot active" id="s1"></div>
+    <div class="step-dot" id="s2"></div>
+    <div class="step-dot" id="s3"></div>
+    <div class="step-dot" id="s4"></div>
+  </div>
+
+  <!-- STEP 1: Upload -->
+  <div id="step1">
+    <div class="card">
+      <div class="card-label">📎 Paso 1 — Comprobante</div>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" accept="image/*" id="fileInput" capture="environment">
+        <span class="upload-icon">📷</span>
+        <h3>Subir comprobante</h3>
+        <p>Toca para tomar foto o elegir de galería</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Analyzing -->
+  <div id="step2" class="hidden">
+    <div class="card">
+      <div class="loading-wrap">
+        <div class="spinner"></div>
+        <p><span class="pulse-dot"></span>Analizando comprobante...</p>
+        <p class="loading-sub">Claude está leyendo los datos</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Review & complete -->
+  <div id="step3" class="hidden">
+    <div class="card">
+      <div class="card-label">✅ Paso 2 — Datos extraídos</div>
+      <div class="preview-wrap">
+        <img id="previewImg" src="" alt="Comprobante">
+        <span class="preview-badge">BISA QR</span>
+      </div>
+      <div class="data-grid" id="dataGrid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">✏️ Paso 3 — Completar registro</div>
+
+      <div id="errorBox" class="error-box hidden"></div>
+
+      <div class="field">
+        <label>Concepto del gasto</label>
+        <textarea id="concepto" placeholder="Ej: Materiales de construcción, pago de servicio, herramientas..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Proyecto</label>
+        <select id="proyecto">
+          <option value="">— Seleccionar proyecto —</option>
+          <option value="Proyecto Mantenimiento Hangar 1">Proyecto Mantenimiento Hangar 1</option>
+          <option value="Proyecto Industrias CAMARO">Proyecto Industrias CAMARO</option>
+          <option value="Proyecto Luminarias Colegio Franco">Proyecto Luminarias Colegio Franco</option>
+          <option value="Proyecto VISAL">Proyecto VISAL</option>
+          <option value="Personal">Personal</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" id="btnRegistrar" onclick="registrarGasto()">
+        📊 Registrar en Google Sheets
+      </button>
+      <button class="btn btn-secondary" onclick="resetApp()">
+        ↩ Nuevo comprobante
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Success -->
+  <div id="step4" class="hidden">
+    <div class="card">
+      <div class="success-wrap">
+        <div class="success-icon">✅</div>
+        <h2>¡REGISTRADO!</h2>
+        <p id="successMsg">El gasto fue guardado correctamente en tu planilla.</p>
+        <a id="sheetLink" class="sheet-link" href="#" target="_blank">
+          📊 Ver Google Sheets
+        </a>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="resetApp()" style="margin-top:8px">
+      ➕ Nuevo comprobante
+    </button>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// CONFIG — Reemplaza estos valores
+// ============================================================
+const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
+const SHEETS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3Bg2djvAglb3eDC4dHU1FruJAPWckDIv5h09a65koaMpUdJEtFGmoaoAMB_dj6WVqkQ/exec";
+
+// ============================================================
+// State
+// ============================================================
+let extractedData = {};
+let imageBase64 = "";
+let sheetUrl = "https://docs.google.com/spreadsheets/d/1Qhc9hWenay_FyrRf89LW2OqeYQn81SAqex29SMy68rE/edit";
+
+// ============================================================
+// File input handler
+// ============================================================
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const dataUrl = ev.target.result;
+    imageBase64 = dataUrl.split(',')[1];
+    document.getElementById('previewImg').src = dataUrl;
+    analyzeImage(imageBase64);
+  };
+  reader.readAsDataURL(file);
+});
+
+// Drag & drop visual feedback
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+zone.addEventListener('drop', e => {
+  e.preventDefault();
+  zone.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      imageBase64 = ev.target.result.split(',')[1];
+      document.getElementById('previewImg').src = ev.target.result;
+      analyzeImage(imageBase64);
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// ============================================================
+// Step helpers
+// ============================================================
+function showStep(n) {
+  ['step1','step2','step3','step4'].forEach((id, i) => {
+    document.getElementById(id).classList.toggle('hidden', i+1 !== n);
+  });
+  // Update dots
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('s'+i);
+    dot.classList.remove('active','done');
+    if (i < n) dot.classList.add('done');
+    else if (i === n) dot.classList.add('active');
+  }
+}
+
+// ============================================================
+// Analyze image with Claude
+// ============================================================
+async function analyzeImage(base64) {
+  showStep(2);
+  
+  try {
+    const response = await fetch(ANTHROPIC_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: [
+            {
+              type: "image",
+              source: { type: "base64", media_type: "image/jpeg", data: base64 }
+            },
+            {
+              type: "text",
+              text: `Eres un extractor de datos de comprobantes de pago QR del Banco BISA de Bolivia.
+Extrae exactamente estos campos del comprobante y responde SOLO con JSON válido, sin markdown, sin texto extra:
+{
+  "fecha": "DD/MM/YYYY",
+  "hora": "HH:MM",
+  "destinatario": "nombre completo del campo PARA",
+  "banco_destino": "nombre del banco destino",
+  "monto": "número sin símbolo ni texto (ej: 84.00)",
+  "motivo": "texto del campo motivo",
+  "nro_transaccion": "número de transacción"
+}
+Si algún campo no se ve claramente, usa "N/D".`
+            }
+          ]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    
+    if (data.error) throw new Error(data.error.message);
+    
+    const text = data.content.find(b => b.type === 'text')?.text || '{}';
+    const clean = text.replace(/```json|```/g, '').trim();
+    extractedData = JSON.parse(clean);
+    
+    renderExtractedData(extractedData);
+    showStep(3);
+
+  } catch (err) {
+    console.error(err);
+    // Fallback: show manual entry
+    extractedData = { fecha:'', hora:'', destinatario:'', banco_destino:'', monto:'', motivo:'', nro_transaccion:'' };
+    renderExtractedData(extractedData);
+    showStep(3);
+    showError('No se pudieron extraer los datos automáticamente. Por favor verifica los campos.');
+  }
+}
+
+// ============================================================
+// Render extracted data
+// ============================================================
+function renderExtractedData(d) {
+  const grid = document.getElementById('dataGrid');
+  grid.innerHTML = `
+    <div class="data-row">
+      <span class="lbl">Fecha</span>
+      <span class="val">${d.fecha || 'N/D'} ${d.hora || ''}</span>
+    </div>
+    <div class="data-row">
+      <span class="lbl">Para</span>
+      <span class="val">${d.destinatario || 'N/D'}</span>
+    </div>
+    <div class="data-row">
+      <span class="lbl">Banco destino</span>
+      <span class="val">${d.banco_destino || 'N/D'}</span>
+    </div>
+    <div class="data-row">
+      <span class="lbl">Monto</span>
+      <span class="val monto">Bs ${d.monto || '0.00'}</span>
+    </div>
+    <div class="data-row">
+      <span class="lbl">N° Transacción</span>
+      <span class="val" style="font-family:'DM Mono',monospace;font-size:12px">${d.nro_transaccion || 'N/D'}</span>
+    </div>
+  `;
+
+  // Pre-fill motivo if not "varios"
+  if (d.motivo && d.motivo.toLowerCase() !== 'varios') {
+    document.getElementById('concepto').value = d.motivo;
+  }
+}
+
+// ============================================================
+// Register in Google Sheets
+// ============================================================
+async function registrarGasto() {
+  const concepto = document.getElementById('concepto').value.trim();
+  const proyecto = document.getElementById('proyecto').value;
+
+  if (!concepto) { showError('Por favor ingresa el concepto del gasto.'); return; }
+  if (!proyecto) { showError('Por favor selecciona el proyecto.'); return; }
+
+  hideError();
+  document.getElementById('btnRegistrar').disabled = true;
+  document.getElementById('btnRegistrar').innerHTML = '⏳ Registrando...';
+
+  const row = {
+    fecha: extractedData.fecha || '',
+    hora: extractedData.hora || '',
+    destinatario: extractedData.destinatario || '',
+    banco_destino: extractedData.banco_destino || '',
+    monto: extractedData.monto || '',
+    concepto: concepto,
+    proyecto: proyecto,
+    nro_transaccion: extractedData.nro_transaccion || '',
+    timestamp: new Date().toISOString()
+  };
+
+  // If no script URL configured, show demo success
+  if (!SHEETS_SCRIPT_URL) {
+    showDemoSuccess(row);
+    return;
+  }
+
+  try {
+    // Use GET with URL params to avoid CORS preflight issues
+    const params = new URLSearchParams(row);
+    const url = SHEETS_SCRIPT_URL + '?' + params.toString();
+    
+    await fetch(url, {
+      method: 'GET',
+      mode: 'no-cors'
+    });
+    // no-cors means we can't read the response, but if no exception = success
+    showSuccess(row);
+  } catch (err) {
+    showError('Error al conectar con Google Sheets. Intenta nuevamente.');
+    document.getElementById('btnRegistrar').disabled = false;
+    document.getElementById('btnRegistrar').innerHTML = '📊 Registrar en Google Sheets';
+  }
+}
+
+function showDemoSuccess(row) {
+  const msg = `
+    <strong>${row.fecha}</strong> · <strong>Bs ${row.monto}</strong><br>
+    ${row.destinatario}<br>
+    Proyecto: <em>${row.proyecto}</em><br>
+    Concepto: <em>${row.concepto}</em>
+  `;
+  document.getElementById('successMsg').innerHTML = msg;
+  document.getElementById('sheetLink').style.display = sheetUrl ? 'inline-flex' : 'none';
+  if (sheetUrl) document.getElementById('sheetLink').href = sheetUrl;
+  showStep(4);
+}
+
+function showSuccess(row) {
+  showDemoSuccess(row);
+}
+
+function showError(msg) {
+  const box = document.getElementById('errorBox');
+  box.textContent = msg;
+  box.classList.remove('hidden');
+}
+
+function hideError() {
+  document.getElementById('errorBox').classList.add('hidden');
+}
+
+function resetApp() {
+  extractedData = {};
+  imageBase64 = "";
+  document.getElementById('fileInput').value = '';
+  document.getElementById('concepto').value = '';
+  document.getElementById('proyecto').value = '';
+  document.getElementById('btnRegistrar').disabled = false;
+  document.getElementById('btnRegistrar').innerHTML = '📊 Registrar en Google Sheets';
+  hideError();
+  showStep(1);
+}
+</script>
+</body>
+</html>
