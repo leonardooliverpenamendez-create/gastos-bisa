@@ -7,129 +7,48 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --surface2: #1c1c27;
-    --border: #2a2a3a;
-    --accent: #00e5a0;
-    --accent2: #0066ff;
-    --danger: #ff4455;
-    --text: #f0f0f5;
-    --muted: #6b6b80;
-    --gold: #ffd166;
+    --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c27;
+    --border: #2a2a3a; --accent: #00e5a0; --accent2: #0066ff;
+    --danger: #ff4455; --text: #f0f0f5; --muted: #6b6b80; --gold: #ffd166;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
   body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
   }
-  .app {
-    position: relative;
-    z-index: 1;
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 24px 16px 60px;
-  }
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-  .header-icon {
-    width: 44px; height: 44px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
-  }
-  .header-text h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px; letter-spacing: 2px; line-height: 1;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
+  .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 24px 16px 60px; }
+  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+  .header-icon { width: 44px; height: 44px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .header-text h1 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; line-height: 1; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .header-text p { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
   .steps { display: flex; gap: 6px; margin-bottom: 28px; }
   .step-dot { height: 3px; flex: 1; border-radius: 2px; background: var(--border); transition: background 0.3s; }
   .step-dot.active { background: var(--accent); }
   .step-dot.done { background: var(--accent2); }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px; padding: 24px; margin-bottom: 16px;
-    animation: fadeUp 0.3s ease;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .card-label {
-    font-family: 'DM Mono', monospace; font-size: 10px;
-    color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px;
-  }
-  .upload-zone {
-    border: 2px dashed var(--border); border-radius: 16px;
-    padding: 32px 20px; text-align: center; cursor: pointer;
-    transition: all 0.25s; background: var(--surface2);
-    position: relative; overflow: hidden;
-  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 16px; animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .card-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+  .upload-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.25s; background: var(--surface2); position: relative; overflow: hidden; }
   .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(0,229,160,0.05); }
   .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
   .upload-icon { font-size: 36px; margin-bottom: 10px; display: block; }
   .upload-zone h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
   .upload-zone p { font-size: 13px; color: var(--muted); }
-  .preview-wrap {
-    position: relative; border-radius: 12px; overflow: hidden;
-    margin-bottom: 12px; max-height: 260px;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--surface2);
-  }
+  .preview-wrap { position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 12px; max-height: 260px; display: flex; align-items: center; justify-content: center; background: var(--surface2); }
   .preview-wrap img { width: 100%; max-height: 260px; object-fit: contain; display: block; }
-  .preview-badge {
-    position: absolute; top: 10px; right: 10px;
-    background: rgba(0,0,0,0.7); border: 1px solid var(--border);
-    border-radius: 8px; padding: 4px 10px;
-    font-size: 11px; font-family: 'DM Mono', monospace; color: var(--accent);
-  }
-  .btn-change-photo {
-    width: 100%; padding: 10px; border-radius: 10px;
-    border: 1px dashed var(--border); background: transparent;
-    color: var(--muted); font-size: 13px; cursor: pointer;
-    margin-bottom: 4px; font-family: 'DM Sans', sans-serif;
-    position: relative; overflow: hidden;
-  }
+  .preview-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; font-size: 11px; font-family: 'DM Mono', monospace; color: var(--accent); }
+  .btn-change-photo { width: 100%; padding: 10px; border-radius: 10px; border: 1px dashed var(--border); background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; margin-bottom: 4px; font-family: 'DM Sans', sans-serif; position: relative; overflow: hidden; }
   .btn-change-photo input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
   .btn-change-photo:hover { border-color: var(--accent); color: var(--accent); }
-  .analyzing-box {
-    background: rgba(0,229,160,0.06); border: 1px solid rgba(0,229,160,0.25);
-    border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 14px;
-  }
+  .analyzing-box { background: rgba(0,229,160,0.06); border: 1px solid rgba(0,229,160,0.25); border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 14px; }
   .analyzing-box .spin { font-size: 32px; display: block; margin-bottom: 10px; animation: spin 1.5s linear infinite; }
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   .analyzing-box p { color: var(--accent); font-size: 14px; font-family: 'DM Mono', monospace; }
   .field { margin-bottom: 14px; }
   .field label { display: block; font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-  .field input, .field textarea, .field select {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 12px 14px; color: var(--text);
-    font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
-    transition: border-color 0.2s; -webkit-appearance: none;
-  }
+  .field input, .field textarea, .field select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
   .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); }
   .field select option { background: var(--surface2); color: var(--text); }
   .field textarea { resize: vertical; min-height: 60px; }
@@ -137,50 +56,25 @@
   .fields-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
   .section-title { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-  .ai-badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.3);
-    border-radius: 6px; padding: 3px 8px;
-    font-size: 10px; color: var(--accent); font-family: 'DM Mono', monospace;
-    margin-bottom: 14px;
-  }
-  .btn {
-    width: 100%; padding: 16px; border-radius: 14px; border: none;
-    cursor: pointer; font-family: 'DM Sans', sans-serif;
-    font-size: 15px; font-weight: 600; transition: all 0.2s;
-    display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;
-  }
+  .ai-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.3); border-radius: 6px; padding: 3px 8px; font-size: 10px; color: var(--accent); font-family: 'DM Mono', monospace; margin-bottom: 14px; }
+  .btn { width: 100%; padding: 16px; border-radius: 14px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
   .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #000; }
   .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
   .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
   .btn-secondary:hover { border-color: var(--accent); }
-  .error-box {
-    background: rgba(255,68,85,0.1); border: 1px solid var(--danger);
-    border-radius: 10px; padding: 12px 14px; font-size: 13px;
-    color: var(--danger); margin-bottom: 14px;
-  }
+  .error-box { background: rgba(255,68,85,0.1); border: 1px solid var(--danger); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--danger); margin-bottom: 14px; }
   .hidden { display: none !important; }
   .success-wrap { text-align: center; padding: 16px 0; }
   .success-icon { font-size: 56px; margin-bottom: 16px; }
-  .success-wrap h2 {
-    font-family: 'Bebas Neue', sans-serif; font-size: 32px;
-    letter-spacing: 3px; color: var(--accent); margin-bottom: 10px;
-  }
+  .success-wrap h2 { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: var(--accent); margin-bottom: 10px; }
   .success-wrap p { color: var(--muted); font-size: 14px; line-height: 1.6; }
-  .sheet-link {
-    display: inline-flex; align-items: center; gap: 8px;
-    margin-top: 20px; padding: 12px 24px;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 12px; color: var(--accent); text-decoration: none;
-    font-size: 14px; font-weight: 500; transition: border-color 0.2s;
-  }
+  .sheet-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 12px 24px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 500; transition: border-color 0.2s; }
   .sheet-link:hover { border-color: var(--accent); }
 </style>
 </head>
 <body>
 <div class="app">
-
   <div class="header">
     <div class="header-icon">📋</div>
     <div class="header-text">
@@ -188,14 +82,13 @@
       <p>Registro automático de comprobantes QR</p>
     </div>
   </div>
-
   <div class="steps">
     <div class="step-dot active" id="s1"></div>
     <div class="step-dot" id="s2"></div>
     <div class="step-dot" id="s3"></div>
   </div>
 
-  <!-- STEP 1: Cargar foto -->
+  <!-- STEP 1 -->
   <div id="step1">
     <div class="card">
       <div class="card-label">📷 Paso 1 — Foto del comprobante</div>
@@ -208,7 +101,7 @@
     </div>
   </div>
 
-  <!-- STEP 2: Analizando + datos -->
+  <!-- STEP 2 -->
   <div id="step2" class="hidden">
     <div class="card">
       <div class="card-label">🖼️ Comprobante</div>
@@ -222,61 +115,35 @@
       </button>
     </div>
 
-    <!-- Analizando -->
-    <div class="card" id="analyzingBox">
+    <div class="card" id="analyzingCard">
       <div class="analyzing-box">
         <span class="spin">⚙️</span>
-        <p id="analyzingText">Analizando comprobante con IA...</p>
+        <p id="analyzingText">Enviando a analizar con IA...</p>
       </div>
     </div>
 
-    <!-- Formulario -->
     <div class="card hidden" id="formCard">
       <div class="card-label">✏️ Paso 2 — Verificar y completar</div>
       <div class="ai-badge">✨ Datos extraídos automáticamente por IA</div>
 
       <p class="section-title">📅 Fecha y hora</p>
       <div class="fields-row">
-        <div class="field">
-          <label>Fecha</label>
-          <input type="date" id="fecha">
-        </div>
-        <div class="field">
-          <label>Hora</label>
-          <input type="time" id="hora">
-        </div>
+        <div class="field"><label>Fecha</label><input type="date" id="fecha"></div>
+        <div class="field"><label>Hora</label><input type="time" id="hora"></div>
       </div>
-
       <hr class="divider">
       <p class="section-title">👤 Destinatario</p>
-      <div class="field">
-        <label>Para (nombre)</label>
-        <input type="text" id="destinatario" placeholder="Ej: Juan Pérez López">
-      </div>
-      <div class="field">
-        <label>Banco destino</label>
-        <input type="text" id="banco_destino" placeholder="Ej: BNB, Banco Unión...">
-      </div>
-
+      <div class="field"><label>Para (nombre)</label><input type="text" id="destinatario" placeholder="Ej: Juan Pérez López"></div>
+      <div class="field"><label>Banco destino</label><input type="text" id="banco_destino" placeholder="Ej: BNB, Banco Unión..."></div>
       <hr class="divider">
       <p class="section-title">💰 Transacción</p>
       <div class="fields-row">
-        <div class="field">
-          <label>Monto (Bs)</label>
-          <input type="number" id="monto" placeholder="0.00" step="0.01" min="0">
-        </div>
-        <div class="field">
-          <label>N° Transacción</label>
-          <input type="text" id="nro_transaccion" placeholder="Ej: 123456">
-        </div>
+        <div class="field"><label>Monto (Bs)</label><input type="number" id="monto" placeholder="0.00" step="0.01"></div>
+        <div class="field"><label>N° Transacción</label><input type="text" id="nro_transaccion" placeholder="Ej: 123456"></div>
       </div>
-
       <hr class="divider">
       <p class="section-title">📝 Categorización</p>
-      <div class="field">
-        <label>Concepto del gasto</label>
-        <textarea id="concepto" placeholder="Ej: Materiales de construcción..."></textarea>
-      </div>
+      <div class="field"><label>Concepto del gasto</label><textarea id="concepto" placeholder="Ej: Materiales de construcción..."></textarea></div>
       <div class="field">
         <label>Proyecto</label>
         <select id="proyecto">
@@ -288,54 +155,34 @@
           <option value="Personal">Personal</option>
         </select>
       </div>
-
       <div id="errorBox" class="error-box hidden"></div>
-
-      <button class="btn btn-primary" id="btnRegistrar" onclick="registrarGasto()">
-        📊 Registrar en Google Sheets
-      </button>
-      <button class="btn btn-secondary" onclick="resetApp()">
-        ↩ Nuevo comprobante
-      </button>
+      <button class="btn btn-primary" id="btnRegistrar" onclick="registrarGasto()">📊 Registrar en Google Sheets</button>
+      <button class="btn btn-secondary" onclick="resetApp()">↩ Nuevo comprobante</button>
     </div>
   </div>
 
-  <!-- STEP 3: Éxito -->
+  <!-- STEP 3 -->
   <div id="step3" class="hidden">
     <div class="card">
       <div class="success-wrap">
         <div class="success-icon">✅</div>
         <h2>¡REGISTRADO!</h2>
         <p id="successMsg">El gasto fue guardado correctamente.</p>
-        <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1xW_kLYjwfigzhf2uWq07RUX9zqmWMKVnxD9k76X78es/edit" target="_blank">
-          📊 Ver Google Sheets
-        </a>
+        <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1xW_kLYjwfigzhf2uWq07RUX9zqmWMKVnxD9k76X78es/edit" target="_blank">📊 Ver Google Sheets</a>
       </div>
     </div>
-    <button class="btn btn-primary" onclick="resetApp()" style="margin-top:8px">
-      ➕ Nuevo comprobante
-    </button>
+    <button class="btn btn-primary" onclick="resetApp()" style="margin-top:8px">➕ Nuevo comprobante</button>
   </div>
-
 </div>
-<script>
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbx3Uh5wXS_3ddhk6paNTExH4H4THoK2obOt70NRsKKV_JC3TORohIsIWc7odSvf1A31/exec";
-const _k = ["AQ.Ab8RN6LP","ImJqR53O3-X","X76uO8rFM9G","fv8Vqxq6aj","DLLdQ_bWPA"].join('');
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + _k;
 
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3Uh5wXS_3ddhk6paNTExH4H4THoK2obOt70NRsKKV_JC3TORohIsIWc7odSvf1A31/exec";
 let imageBase64 = null;
 let imageMime = null;
 
 function showStep(n) {
-  ['step1','step2','step3'].forEach((id, i) => {
-    document.getElementById(id).classList.toggle('hidden', i+1 !== n);
-  });
-  for (let i = 1; i <= 3; i++) {
-    const dot = document.getElementById('s'+i);
-    dot.classList.remove('active','done');
-    if (i < n) dot.classList.add('done');
-    else if (i === n) dot.classList.add('active');
-  }
+  ['step1','step2','step3'].forEach((id,i) => document.getElementById(id).classList.toggle('hidden', i+1!==n));
+  for(let i=1;i<=3;i++){const d=document.getElementById('s'+i);d.classList.remove('active','done');if(i<n)d.classList.add('done');else if(i===n)d.classList.add('active');}
 }
 
 function handleFile(file) {
@@ -346,10 +193,10 @@ function handleFile(file) {
     const dataUrl = ev.target.result;
     imageBase64 = dataUrl.split(',')[1];
     document.getElementById('previewImg').src = dataUrl;
-    showStep(2);
-    document.getElementById('analyzingBox').classList.remove('hidden');
+    document.getElementById('analyzingCard').classList.remove('hidden');
     document.getElementById('formCard').classList.add('hidden');
-    analizarConGemini();
+    showStep(2);
+    analizarImagen();
   };
   reader.readAsDataURL(file);
 }
@@ -364,9 +211,9 @@ document.getElementById('fileInput2').addEventListener('change', e => {
     const dataUrl = ev.target.result;
     imageBase64 = dataUrl.split(',')[1];
     document.getElementById('previewImg').src = dataUrl;
-    document.getElementById('analyzingBox').classList.remove('hidden');
+    document.getElementById('analyzingCard').classList.remove('hidden');
     document.getElementById('formCard').classList.add('hidden');
-    analizarConGemini();
+    analizarImagen();
   };
   reader.readAsDataURL(file);
 });
@@ -376,162 +223,100 @@ zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add(
 zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
 zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag'); handleFile(e.dataTransfer.files[0]); });
 
-async function analizarConGemini() {
+async function analizarImagen() {
   document.getElementById('analyzingText').textContent = 'Analizando comprobante con IA...';
-  const prompt = `Analiza este comprobante de transferencia bancaria boliviana (Banco BISA QR) y extrae los siguientes datos en formato JSON puro, sin markdown ni backticks:
-{
-  "fecha": "DD/MM/YYYY",
-  "hora": "HH:MM",
-  "destinatario": "nombre completo del destinatario",
-  "banco_destino": "nombre del banco destino",
-  "monto": "número sin símbolo de moneda",
-  "nro_transaccion": "número de transacción o referencia"
-}
-Si no encuentras algún dato, deja el campo como cadena vacía "". Responde SOLO el JSON, nada más.`;
-
   try {
-    const res = await fetch(GEMINI_URL, {
+    const res = await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{
-          parts: [
-            { text: prompt },
-            { inline_data: { mime_type: imageMime, data: imageBase64 } }
-          ]
-        }],
-        generationConfig: { temperature: 0.1, maxOutputTokens: 512 }
-      })
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ image: imageBase64, mimeType: imageMime })
     });
-
-    if (!res.ok) {
-      const errData = await res.json();
-      throw new Error(errData.error?.message || 'Error Gemini ' + res.status);
-    }
-
     const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
-    llenarFormulario(parsed);
+    if (data.ok && data.extracted) {
+      llenarFormulario(data.extracted);
+    } else {
+      throw new Error(data.error || 'Sin respuesta');
+    }
   } catch(err) {
     console.error(err);
     document.getElementById('analyzingText').textContent = '⚠️ No se pudo analizar: ' + err.message;
-    // Mostrar formulario igual para llenar manualmente
     setTimeout(() => {
-      document.getElementById('analyzingBox').classList.add('hidden');
+      document.getElementById('analyzingCard').classList.add('hidden');
       document.getElementById('formCard').classList.remove('hidden');
       setDefaults();
     }, 2500);
   }
 }
 
-function llenarFormulario(datos) {
-  document.getElementById('analyzingBox').classList.add('hidden');
-
-  // Fecha: convertir DD/MM/YYYY → YYYY-MM-DD para el input date
-  if (datos.fecha) {
-    const parts = datos.fecha.split('/');
-    if (parts.length === 3) {
-      document.getElementById('fecha').value = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
-    }
+function llenarFormulario(d) {
+  document.getElementById('analyzingCard').classList.add('hidden');
+  if (d.fecha) {
+    const p = d.fecha.split('/');
+    if (p.length===3) document.getElementById('fecha').value = `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
   }
-  if (datos.hora) {
-    document.getElementById('hora').value = datos.hora.substring(0,5);
-  }
-
-  const fields = ['destinatario','banco_destino','monto','nro_transaccion'];
-  fields.forEach(f => {
-    const el = document.getElementById(f);
-    if (datos[f]) {
-      el.value = datos[f];
-      el.classList.add('ai-filled');
-    }
+  if (d.hora) document.getElementById('hora').value = d.hora.substring(0,5);
+  ['destinatario','banco_destino','monto','nro_transaccion'].forEach(f => {
+    if (d[f]) { const el=document.getElementById(f); el.value=d[f]; el.classList.add('ai-filled'); }
   });
-
-  if (!datos.fecha && !datos.hora) setDefaults();
+  if (!d.fecha && !d.hora) setDefaults();
   document.getElementById('formCard').classList.remove('hidden');
 }
 
 function setDefaults() {
   const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  const dd = String(now.getDate()).padStart(2,'0');
-  const hh = String(now.getHours()).padStart(2,'0');
-  const min = String(now.getMinutes()).padStart(2,'0');
-  if (!document.getElementById('fecha').value)
-    document.getElementById('fecha').value = `${yyyy}-${mm}-${dd}`;
-  if (!document.getElementById('hora').value)
-    document.getElementById('hora').value = `${hh}:${min}`;
+  const yyyy=now.getFullYear(), mm=String(now.getMonth()+1).padStart(2,'0'), dd=String(now.getDate()).padStart(2,'0');
+  const hh=String(now.getHours()).padStart(2,'0'), min=String(now.getMinutes()).padStart(2,'0');
+  if (!document.getElementById('fecha').value) document.getElementById('fecha').value=`${yyyy}-${mm}-${dd}`;
+  if (!document.getElementById('hora').value) document.getElementById('hora').value=`${hh}:${min}`;
 }
 
 async function registrarGasto() {
-  const fecha    = document.getElementById('fecha').value;
-  const hora     = document.getElementById('hora').value;
-  const dest     = document.getElementById('destinatario').value.trim();
-  const banco    = document.getElementById('banco_destino').value.trim();
-  const monto    = document.getElementById('monto').value.trim();
-  const nro      = document.getElementById('nro_transaccion').value.trim();
-  const concepto = document.getElementById('concepto').value.trim();
-  const proyecto = document.getElementById('proyecto').value;
+  const fecha=document.getElementById('fecha').value;
+  const hora=document.getElementById('hora').value;
+  const dest=document.getElementById('destinatario').value.trim();
+  const banco=document.getElementById('banco_destino').value.trim();
+  const monto=document.getElementById('monto').value.trim();
+  const nro=document.getElementById('nro_transaccion').value.trim();
+  const concepto=document.getElementById('concepto').value.trim();
+  const proyecto=document.getElementById('proyecto').value;
 
-  if (!fecha)    { showError('Por favor ingresa la fecha.'); return; }
-  if (!monto)    { showError('Por favor ingresa el monto.'); return; }
-  if (!concepto) { showError('Por favor ingresa el concepto del gasto.'); return; }
-  if (!proyecto) { showError('Por favor selecciona el proyecto.'); return; }
+  if (!fecha){showError('Por favor ingresa la fecha.');return;}
+  if (!monto){showError('Por favor ingresa el monto.');return;}
+  if (!concepto){showError('Por favor ingresa el concepto.');return;}
+  if (!proyecto){showError('Por favor selecciona el proyecto.');return;}
 
   hideError();
-  const btn = document.getElementById('btnRegistrar');
-  btn.disabled = true;
-  btn.innerHTML = '⏳ Registrando...';
+  const btn=document.getElementById('btnRegistrar');
+  btn.disabled=true; btn.innerHTML='⏳ Registrando...';
 
-  const fechaFmt = fecha ? fecha.split('-').reverse().join('/') : '';
-
+  const fechaFmt = fecha.split('-').reverse().join('/');
   const params = new URLSearchParams({
-    fecha: fechaFmt, hora, destinatario: dest,
-    banco_destino: banco, monto, concepto,
-    proyecto, nro_transaccion: nro,
-    timestamp: new Date().toISOString()
+    guardar:'true', fecha:fechaFmt, hora, destinatario:dest,
+    banco_destino:banco, monto, concepto, proyecto, nro_transaccion:nro
   });
 
   try {
-    await fetch(SHEETS_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+    await fetch(SCRIPT_URL+'?'+params.toString(), {method:'GET', mode:'no-cors'});
     showStep(3);
-    document.getElementById('successMsg').innerHTML =
+    document.getElementById('successMsg').innerHTML=
       `<strong>${fechaFmt}</strong> · <strong>Bs ${parseFloat(monto||0).toFixed(2)}</strong><br>
-       ${dest || 'Sin destinatario'} · ${banco || ''}<br>
-       Proyecto: <em>${proyecto}</em><br>
-       Concepto: <em>${concepto}</em>`;
+       ${dest||'Sin destinatario'} · ${banco||''}<br>
+       Proyecto: <em>${proyecto}</em><br>Concepto: <em>${concepto}</em>`;
   } catch(err) {
-    showError('Error al conectar con Google Sheets. Verifica tu conexión.');
-    btn.disabled = false;
-    btn.innerHTML = '📊 Registrar en Google Sheets';
+    showError('Error al conectar con Google Sheets.');
+    btn.disabled=false; btn.innerHTML='📊 Registrar en Google Sheets';
   }
 }
 
-function showError(msg) {
-  const box = document.getElementById('errorBox');
-  box.textContent = msg;
-  box.classList.remove('hidden');
-  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function hideError() { document.getElementById('errorBox').classList.add('hidden'); }
-
-function resetApp() {
-  ['fileInput','fileInput2'].forEach(id => document.getElementById(id).value = '');
-  ['fecha','hora','destinatario','banco_destino','monto','nro_transaccion','concepto'].forEach(id => {
-    const el = document.getElementById(id);
-    el.value = '';
-    el.classList.remove('ai-filled');
-  });
-  document.getElementById('proyecto').value = '';
-  const btn = document.getElementById('btnRegistrar');
-  if (btn) { btn.disabled = false; btn.innerHTML = '📊 Registrar en Google Sheets'; }
-  hideError();
-  imageBase64 = null; imageMime = null;
-  showStep(1);
+function showError(msg){const b=document.getElementById('errorBox');b.textContent=msg;b.classList.remove('hidden');b.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function hideError(){document.getElementById('errorBox').classList.add('hidden');}
+function resetApp(){
+  ['fileInput','fileInput2'].forEach(id=>document.getElementById(id).value='');
+  ['fecha','hora','destinatario','banco_destino','monto','nro_transaccion','concepto'].forEach(id=>{const el=document.getElementById(id);el.value='';el.classList.remove('ai-filled');});
+  document.getElementById('proyecto').value='';
+  const btn=document.getElementById('btnRegistrar');
+  if(btn){btn.disabled=false;btn.innerHTML='📊 Registrar en Google Sheets';}
+  hideError(); imageBase64=null; imageMime=null; showStep(1);
 }
 </script>
 </body>
